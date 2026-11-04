@@ -1,0 +1,39 @@
+## Build
+bin/
+obj/
+out/
+artifacts/
+
+## .NET
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+project.lock.json
+project.fragment.lock.json
+
+## IDE
+.vs/
+.idea/
+*.swp
+*~
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Secrets
+appsettings.*.local.json
+secrets.json
+.env
+!.env.example
+
+## Test
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+## Node (future frontend)
+node_modules/
+dist/

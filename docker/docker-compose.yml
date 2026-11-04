@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: smart-meal-planner-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-smart_meal_planner}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-smart_meal_planner}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    container_name: smart-meal-planner-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: >-
+        Host=postgres;Port=5432;Database=${POSTGRES_DB:-smart_meal_planner};
+        Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      Jwt__Secret: ${JWT_SECRET:-LocalDevOnly_SmartMealPlanner_JwtSecret_Key_Min32Chars!}
+      Database__ApplyMigrationsOnStartup: "true"
+      Cors__AllowedOrigins__0: http://localhost:5173
+    ports:
+      - "${API_PORT:-5000}:8080"
+
+volumes:
+  postgres_data:
