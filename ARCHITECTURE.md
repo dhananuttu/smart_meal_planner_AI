@@ -146,5 +146,5 @@ web/
 
 ## Related docs
 
-- [system-design.md](../docs/system-design.md) — full-stack overview
-- [product-requirements.md](../docs/product-requirements.md) — feature specs
+- [system-design.md](/docs/system-design.md) — full-stack overview
+- [product-requirements.md](/docs/product-requirements.md) — feature specs
